@@ -100,4 +100,6 @@ public final class JSONConstants {
 	public static final String ITEM_NAMES = "itemNames";
 	
 	public static final String VERSION_ID = "versionId";
+
+	public static final String EMPTY_STRING = "";
 }

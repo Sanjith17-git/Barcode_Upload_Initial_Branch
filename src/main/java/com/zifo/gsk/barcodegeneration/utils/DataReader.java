@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zifo.gsk.barcodegeneration.constants.JSONConstants;
 
@@ -44,7 +42,7 @@ public class DataReader {
 				.map(dataIterator -> readJson(dataIterator, columnName)).filter(value -> !value.isEmpty())
 				.forEach(outputData::add);
 
-		outputData.removeAll(Arrays.asList(StringUtils.EMPTY, "No Matches"));
+		outputData.removeAll(Arrays.asList(JSONConstants.EMPTY_STRING, "No Matches"));
 		return outputData;
 	}
 
@@ -93,7 +91,7 @@ public class DataReader {
 		} else if (!path.path(JSONConstants.STRING).isMissingNode()) {
 			conc = path.path(JSONConstants.STRING).asText();
 		} else {
-			conc = StringUtils.EMPTY;
+			conc = JSONConstants.EMPTY_STRING;
 		}
 		return conc;
 

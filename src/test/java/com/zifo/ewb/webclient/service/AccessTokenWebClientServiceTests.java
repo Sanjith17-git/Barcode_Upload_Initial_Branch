@@ -10,7 +10,6 @@ import static org.mockito.Mockito.inOrder;
 import java.net.URI;
 import java.util.function.Function;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.zifo.ewb.exceptions.InvalidTokenRequestException;
 import com.zifo.ewb.testPropertiesHelper.AccessTokenTestProperties;
 import com.zifo.ewb.testPropertiesHelper.TestProperties;
+import com.zifo.gsk.barcodegeneration.constants.JSONConstants;
 import com.zifo.gsk.barcodegeneration.constants.MessageConstants;
 
 import reactor.core.publisher.Mono;
@@ -58,7 +58,8 @@ class AccessTokenWebClientServiceTests {
 	void setUp() {
 		accessTokenWebClientService = new AccessTokenWebClientService(AccessTokenTestProperties.TEST_SCHEME,
 				AccessTokenTestProperties.TEST_HOST, AccessTokenTestProperties.TEST_PORT,
-				AccessTokenTestProperties.TEST_SERVICE_BASE, AccessTokenTestProperties.TEST_AUTHORIZATION);
+				AccessTokenTestProperties.TEST_SERVICE_BASE, AccessTokenTestProperties.TEST_AUTHORIZATION, 10, 10, 10,
+				10);
 		ReflectionTestUtils.setField(accessTokenWebClientService, "webClient", webClient);
 		ReflectionTestUtils.setField(accessTokenWebClientService, "webClient", webClient);
 		ReflectionTestUtils.setField(accessTokenWebClientService, "tokenRequestURL",
@@ -134,7 +135,7 @@ class AccessTokenWebClientServiceTests {
 		JsonNode response = accessTokenWebClientService.executeTokenRequest(AccessTokenTestProperties.TEST_ACCESS_CODE);
 
 		// Validate response
-		assertEquals(StringUtils.EMPTY, response.get("access_token").asText());
+		assertEquals(JSONConstants.EMPTY_STRING, response.get("access_token").asText());
 
 		InOrder inOrder = inOrder(webClient, requestBodyUriSpec, requestBodySpec, responseSpec);
 		inOrder.verify(webClient).post();

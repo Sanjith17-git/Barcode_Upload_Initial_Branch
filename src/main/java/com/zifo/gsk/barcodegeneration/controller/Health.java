@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Health API", description = "Check the health of the API")
 public class Health {
 
-	@Value("${hostname}")
+	@Value("${host}")
 	private String hostName;
 
 	@Operation(summary = "Check the health of the API")

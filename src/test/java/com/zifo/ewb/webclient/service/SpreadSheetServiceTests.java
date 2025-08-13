@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +58,6 @@ class SpreadSheetServiceTests {
 	@Mock
 	private Mono<ResponseEntity<JsonNode>> responseEntity;
 
-	@InjectMocks
 	private SpreadSheetService spreadSheetService;
 
 	private String requestBody;
@@ -70,6 +68,7 @@ class SpreadSheetServiceTests {
 	@BeforeEach
 	void setUp() {
 		// ARRANGE: Initialize the services and injecting the properties fields
+		spreadSheetService = new SpreadSheetService(requestBody, requestBody, requestBody, requestBody, 10, 10, 10, 10);
 		ReflectionTestUtils.setField(spreadSheetService, "webClient", webClient);
 		requestBody = JSONUtils.createJSONToReadTableData(TestProperties.MOCK_REQUIRED_TABLES_STRING);
 		lambdaCaptor = ArgumentCaptor.forClass(Function.class);

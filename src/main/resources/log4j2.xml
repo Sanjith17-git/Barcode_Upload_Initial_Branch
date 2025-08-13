@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+	<Properties>
+		<!-- Spring will expose logging.file.path as LOG_PATH -->
+		<Property name="LOG_PATH">${bundle:application:logLocation}</Property>
+		<Property name="SERVICE_NAME">
+			${bundle:application:spring.application.name}</Property>
+		<Property name="SERVICE_VERSION">${bundle:application:spring.application.version}</Property>
+		<Property name="SERVICE_ENV">
+			${bundle:application:spring.profiles.active}
+		</Property>
+	</Properties>
+
+	<Appenders>
+		<!-- CONSOLE appender → ECS JSON -->
+		<Console name="ConsoleAppender" target="SYSTEM_OUT">
+			<EcsLayout
+				serviceName="${SERVICE_NAME}"
+				serviceVersion="${SERVICE_VERSION}"
+				serviceEnvironment="${SERVICE_ENV:-}"
+				eventDataset="application-logs"
+				includeOrigin="true"
+				includeMarkers="true"
+				stackTraceAsArray="true">
+				<!-- custom fields in ECS output -->
+				<KeyValuePair key="thread.name" value="%thread" />
+			</EcsLayout>
+
+		</Console>
+
+		<!-- ROLLING FILE appender → ECS JSON -->
+		<RollingFile name="FileAppender"
+			fileName="${LOG_PATH}/barcode_generator.log"
+			filePattern="${LOG_PATH}/barcode_generator-%d{yyyy-MM-dd}.log.gz">
+			<EcsLayout
+				serviceName="${SERVICE_NAME}"
+				serviceVersion="${SERVICE_VERSION}"
+				serviceEnvironment="${SERVICE_ENV:-}"
+				eventDataset="application-logs"
+				includeOrigin="true"
+				includeMarkers="true"
+				stackTraceAsArray="true">
+				<!-- custom fields in ECS output -->
+				<KeyValuePair key="thread.name" value="%thread" />
+			</EcsLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy max="7" />
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<!-- root logger -->
+		<Root level="INFO">
+			<AppenderRef ref="ConsoleAppender" />
+			<AppenderRef ref="FileAppender" />
+		</Root>
+	</Loggers>
+</Configuration>
